@@ -1,4 +1,16 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
-  "extends": ["ultracite"]
+  "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
+  "extends": ["ultracite"],
+  "linter": {
+    "rules": {
+      "nursery": {
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "interface"
+          }
+        }
+      }
+    }
+  }
 }
