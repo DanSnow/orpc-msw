@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: write
+  pull-requests: write
+  issues: write
+
+name: release
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      prs_created: ${{ steps.release.outputs.prs_created }}
+      pr_number: ${{ steps.pr_number.outputs.pr_number }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          # this assumes that you have created a personal access token
+          # (PAT) and configured it as a GitHub action secret named
+          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - if: ${{ steps.release.outputs.prs_created}}
+        id: pr_number
+        env:
+          PR: ${{ steps.release.outputs.pr }}
+        run: |
+          echo "pr_number=$(echo $PR | jq .number)" >> $GITHUB_OUTPUT

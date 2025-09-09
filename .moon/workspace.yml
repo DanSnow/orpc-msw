@@ -1,0 +1,15 @@
+# https://moonrepo.dev/docs/config/workspace
+$schema: "./cache/schemas/workspace.json"
+
+# extends: './shared/workspace.yml'
+
+vcs:
+  defaultBranch: main
+  hooks:
+    pre-commit:
+      - moon run :lint
+  syncHooks: true
+
+projects:
+  - "."
+  - "docs"

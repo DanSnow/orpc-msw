@@ -1,0 +1,33 @@
+{
+  "name": "orpc-msw",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "build": "moon run build --",
+    "test": "moon run test --"
+  },
+  "keywords": [],
+  "author": {
+    "name": "DanSnow",
+    "url": "https://github.com/DanSnow"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "@biomejs/biome": "2.2.3",
+    "@moonrepo/cli": "^1.40.2",
+    "@tsconfig/node22": "^22.0.2",
+    "ultracite": "5.3.4",
+    "unbuild": "^3.6.1",
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
+  }
+}

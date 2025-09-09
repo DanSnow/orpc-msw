@@ -1,0 +1,10 @@
+ignoreWorkspaceRootCheck: true
+
+packages:
+  - .
+  - docs
+
+onlyBuiltDependencies:
+  - "@moonrepo/cli"
+  - esbuild
+  - sharp

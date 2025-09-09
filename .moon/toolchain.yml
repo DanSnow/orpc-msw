@@ -1,0 +1,17 @@
+# https://moonrepo.dev/docs/config/toolchain
+$schema: "./cache/schemas/toolchain.json"
+
+# extends: './shared/toolchain.yml'
+
+node:
+  # version: '20.0.0'
+  packageManager: "pnpm"
+  pnpm: {}
+  addEnginesConstraint: true
+  dedupeOnLockfileChange: true
+  # dependencyVersionFormat: 'workspace'
+  inferTasksFromScripts: false
+  # rootPackageOnly: true
+  syncProjectWorkspaceDependencies: true
+  syncPackageManagerField: false
+  # syncVersionManagerConfig: 'nvm'

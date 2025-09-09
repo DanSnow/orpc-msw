@@ -1,0 +1,17 @@
+$schema: https://moonrepo.dev/schemas/project.json
+
+tasks:
+  build:
+    command: unbuild
+    toolchain: node
+    inputs:
+      - src/**/*
+      - build.confg.ts
+    outputs:
+      - dist/**/*
+  test:
+    command: vitest
+    toolchain: node
+    inputs:
+      - src/**/*
+      - vitest.config.ts

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:js-lib",
+    ":semanticCommitTypeAll(chore)",
+    ":combinePatchMinorReleases",
+    ":automergeStableNonMajor",
+    ":maintainLockFilesWeekly"
+  ],
+  "packageRules": [
+    {
+      "automerge": true,
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["@astrojs/starlight"]
+    }
+  ]
+}

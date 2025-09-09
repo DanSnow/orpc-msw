@@ -1,0 +1,9 @@
+tasks:
+  build:
+    command: astro
+    args:
+      - build
+  dev:
+    command: astro
+    args:
+      - dev
