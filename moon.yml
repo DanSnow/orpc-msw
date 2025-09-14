@@ -2,11 +2,11 @@ $schema: https://moonrepo.dev/schemas/project.json
 
 tasks:
   build:
-    command: unbuild
+    command: tsdown
     toolchain: node
     inputs:
       - src/**/*
-      - build.confg.ts
+      - tsdown.config.ts
     outputs:
       - dist/**/*
   test:
