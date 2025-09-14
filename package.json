@@ -31,6 +31,7 @@
     "@tsconfig/node22": "^22.0.2",
     "msw": "^2.11.1",
     "tsdown": "^0.15.1",
+    "typescript": "^5.9.2",
     "ultracite": "5.3.4",
     "vite": "^7.1.5",
     "vitest": "^3.2.4",
