@@ -2,13 +2,19 @@ import type {
   AnyContractProcedure,
   AnyContractRouter,
   ContractProcedure,
+  HTTPMethod,
   InferSchemaInput,
   InferSchemaOutput,
 } from '@orpc/contract'
 import { isContractProcedure } from '@orpc/contract'
+import {
+  StandardBracketNotationSerializer,
+  StandardOpenAPIJsonSerializer,
+  StandardOpenAPISerializer,
+} from '@orpc/openapi-client/standard'
+import { destr } from 'destr'
 import { type DefaultBodyType, type HttpHandler, HttpResponse, http } from 'msw'
 import { joinURL } from 'ufo'
-import { destr } from 'destr'
 
 interface MSWProcedureInput<TInput> {
   request: Request
@@ -38,15 +44,24 @@ type MSWUtilities<T extends AnyContractRouter> = T extends ContractProcedure<inf
 
 function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; baseUrl: string }): MSWUtilities<T> {
   const { router, baseUrl } = options
+  const jsonSerializer = new StandardOpenAPIJsonSerializer()
+  const bracketNotationSerializer = new StandardBracketNotationSerializer()
+  const serializer = new StandardOpenAPISerializer(jsonSerializer, bracketNotationSerializer)
 
   function createHandler<TInput, TOutput>(
     proc: AnyContractProcedure,
     path: string[],
     mockResponse: MSWMockInput<TInput, TOutput>,
   ): HttpHandler {
-    const routePath = proc['~orpc'].route.path ?? `/${path.join('/')}`
-    return http.post(joinURL(baseUrl, routePath), async ({ request }) => {
-      const input = destr(await request.text()) as TInput
+    const { route } = proc['~orpc']
+    const routePath = route.path ?? `/${path.join('/')}`
+    const httpHandler = getMSWMethods(route.method)
+    return httpHandler(joinURL(baseUrl, routePath), async ({ request }) => {
+      const input =
+        route.method === 'GET'
+          ? (serializer.deserialize(new URL(request.url).searchParams) as TInput)
+          : (destr(await request.text()) as TInput)
+
       let response: TOutput | HttpResponse<DefaultBodyType> | Response
 
       if (typeof mockResponse === 'function') {
@@ -98,6 +113,25 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
   }
 
   return createRecursiveProxy(router, []) as MSWUtilities<T>
+}
+
+function getMSWMethods(method?: HTTPMethod) {
+  switch (method) {
+    case 'GET':
+      return http.get
+    case 'POST':
+      return http.post
+    case 'PUT':
+      return http.put
+    case 'DELETE':
+      return http.delete
+    case 'PATCH':
+      return http.patch
+    case 'HEAD':
+      return http.head
+    default:
+      return http.post
+  }
 }
 
 export { createMSWUtilities }
