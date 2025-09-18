@@ -13,7 +13,8 @@
   "scripts": {
     "build": "moon run build --",
     "lint": "biome check --fix",
-    "test": "moon run test --"
+    "test": "moon run test --",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": {
