@@ -41,7 +41,6 @@ export const myContract = os.router({
     .route({ method: "GET", path: "/hello" })
     .input(z.object({ name: z.string() }))
     .output(z.object({ message: z.string() }))
-    ,
 });
 ```
 
