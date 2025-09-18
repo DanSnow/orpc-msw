@@ -1,6 +1,6 @@
 # orpc-msw
 
-A utility library for simplifying the mocking of `@orpc/contract` procedures (specifically for OpenAPI-based `orpc` contracts) using Mock Service Worker (MSW) for testing. This library is currently designed for OpenAPI `orpc` and does not support `orpc`'s `RPCHandler`.
+A utility library for simplifying the mocking of [`@orpc/contract`](https://orpc.unnoq.com) procedures (specifically for OpenAPI-based `orpc` contracts) using [Mock Service Worker (MSW)](https://mswjs.io) for testing. This library is currently designed for OpenAPI `orpc` and does not support `orpc`'s `RPCHandler`.
 
 ## ✨ Features
 
