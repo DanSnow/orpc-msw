@@ -58,7 +58,7 @@ const msw = createMSWUtilities({
 });
 
 export const handlers = [
-  msw.greeter.hello.handler(({ input }) => ({
+  msw.greeter.handler(({ input }) => ({
     message: `Hello, ${input.name}! This is a mock response.`,
   })),
 ];
