@@ -14,8 +14,12 @@
     "build": "moon run build --",
     "lint": "biome check --fix",
     "test": "moon run test --",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "test -z \"$MOON_VERSION\" && moon run --no-actions build || true"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "keywords": [],
   "author": {
     "name": "DanSnow",

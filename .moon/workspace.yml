@@ -7,7 +7,7 @@ vcs:
   defaultBranch: main
   hooks:
     pre-commit:
-      - moon run :lint
+      - moon run --no-actions :lint
   syncHooks: true
 
 projects:
