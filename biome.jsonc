@@ -1,6 +1,9 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
   "extends": ["ultracite"],
+  "formatter": {
+    "lineWidth": 120
+  },
   "linter": {
     "rules": {
       "nursery": {
@@ -10,6 +13,9 @@
             "style": "interface"
           }
         }
+      },
+      "performance": {
+        "noBarrelFile": "off"
       }
     }
   }

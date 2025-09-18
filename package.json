@@ -12,6 +12,7 @@
   "type": "module",
   "scripts": {
     "build": "moon run build --",
+    "lint": "biome check --fix",
     "test": "moon run test --"
   },
   "keywords": [],
