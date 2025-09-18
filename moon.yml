@@ -15,3 +15,9 @@ tasks:
     inputs:
       - src/**/*
       - vitest.config.ts
+  lint:
+    command: biome
+    args:
+      - check
+      - --fix
+    toolchain: node
