@@ -7,7 +7,7 @@ title: "createMSWUtilities"
 
 > **createMSWUtilities**\<`T`\>(`options`): `MSWUtilities`\<`T`\>
 
-Defined in: [msw.ts:89](https://github.com/DanSnow/orpc-msw/blob/547a39bb9d90bdea3f469c2b3b130998eb38e73f/src/msw.ts#L89)
+Defined in: [msw.ts:89](https://github.com/DanSnow/orpc-msw/blob/a203afcc1b7f7abba08733e0d937e155210b7078/src/msw.ts#L89)
 
 The main function to create MSW handlers from your `@orpc/contract` router.
 

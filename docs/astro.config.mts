@@ -6,6 +6,7 @@ import starlightTypeDoc, { typeDocSidebarGroup } from "starlight-typedoc";
 
 // https://astro.build/config
 export default defineConfig({
+  base: "/orpc-msw/",
   vite: {
     ssr: {
       noExternal: ["zod"],

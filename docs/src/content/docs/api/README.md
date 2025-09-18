@@ -7,4 +7,4 @@ title: "orpc-msw"
 
 ## Functions
 
-- [createMSWUtilities](/api/functions/createmswutilities/)
+- [createMSWUtilities](/orpc-msw/api/functions/createmswutilities/)
