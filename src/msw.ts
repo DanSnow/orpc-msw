@@ -16,12 +16,31 @@ import { destr } from "destr";
 import { type DefaultBodyType, type HttpHandler, type HttpRequestHandler, HttpResponse, http } from "msw";
 import { joinURL } from "ufo";
 
+/**
+ * The input type for the handler function when providing a dynamic response.
+ * @template TInput The expected input type for the oRPC procedure.
+ */
 interface MSWProcedureInput<TInput> {
+  /** The original `Request` object from MSW. */
   request: Request;
+  /** The deserialized input for the oRPC procedure, type-inferred from your contract. */
   input: TInput;
+  /** An array of strings representing the path to the current procedure within the contract router. */
   path: string[];
 }
 
+/**
+ * The type for the mock response provided to the `handler` function.
+ * This type allows you to define your mock response in several ways:
+ * - Direct `TOutput`: Provide a static object that matches the `output` schema of your oRPC procedure.
+ * - Function: Provide a function that receives an `MSWProcedureInput` object and returns:
+ *   - A `TOutput` object (static or dynamically generated).
+ *   - A standard `Response` object.
+ *   - An `HttpResponse` object from `msw`.
+ *   - A `Promise` resolving to any of the above.
+ * @template TInput The expected input type for the oRPC procedure.
+ * @template TOutput The expected output type for the oRPC procedure.
+ */
 type MSWMockInput<TInput, TOutput> =
   | TOutput
   | ((
@@ -32,10 +51,26 @@ type MSWMockInput<TInput, TOutput> =
       | HttpResponse<DefaultBodyType>
       | Promise<TOutput | Response | HttpResponse<DefaultBodyType>>);
 
+/**
+ * Represents a single oRPC procedure within the MSW utilities, providing a `handler` function.
+ * @template TInput The expected input type for the oRPC procedure.
+ * @template TOutput The expected output type for the oRPC procedure.
+ */
 interface MSWProcedure<TInput, TOutput> {
+  /**
+   * A function to define the mock response for this oRPC procedure.
+   * It accepts either a direct output value or a function that dynamically generates the response.
+   * @param input The mock input, which can be a static `TOutput` or a function returning `TOutput`, `Response`, or `HttpResponse`.
+   * @returns An MSW `HttpHandler` that can be used with `setupServer` or `setupWorker`.
+   */
   handler: (input: MSWMockInput<TInput, TOutput>) => HttpHandler;
 }
 
+/**
+ * A utility object that mirrors the structure of your oRPC contract,
+ * where each procedure is replaced with an object containing a `handler` function.
+ * @template T The oRPC contract router type.
+ */
 // biome-ignore lint/suspicious/noExplicitAny: it need to be any here to accept any input
 type MSWUtilities<T extends AnyContractRouter> = T extends ContractProcedure<infer Input, infer Output, any, any>
   ? MSWProcedure<InferSchemaInput<Input>, InferSchemaOutput<Output>>
@@ -43,6 +78,14 @@ type MSWUtilities<T extends AnyContractRouter> = T extends ContractProcedure<inf
       [K in keyof T]: T[K] extends AnyContractRouter ? MSWUtilities<T[K]> : never;
     };
 
+/**
+ * The main function to create MSW handlers from your `@orpc/contract` router.
+ * @template T The oRPC contract router type.
+ * @param options An object containing the configuration for `orpc-msw`.
+ * @param options.router Your `@orpc/contract` router definition. This is used to infer the types and structure of your API.
+ * @param options.baseUrl The base URL of your API. This is used to match incoming requests with the defined contract routes.
+ * @returns A utility object that mirrors the structure of your oRPC contract, where each procedure is replaced with an object containing a `handler` function.
+ */
 function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; baseUrl: string }): MSWUtilities<T> {
   const { router, baseUrl } = options;
   const jsonSerializer = new StandardOpenAPIJsonSerializer();

@@ -1,99 +1,87 @@
-# TypeScript Library Starter Template
+# orpc-msw
 
-This repository provides a robust starter template for building TypeScript libraries, featuring a comprehensive development setup for building, testing, linting, and documentation. It leverages a monorepo structure for efficient management of multiple packages.
+A utility library for simplifying the mocking of `@orpc/contract` procedures (specifically for OpenAPI-based `orpc` contracts) using Mock Service Worker (MSW) for testing. This library is currently designed for OpenAPI `orpc` and does not support `orpc`'s `RPCHandler`.
 
 ## ✨ Features
 
-*   **TypeScript**: Strongly typed JavaScript for enhanced code quality and maintainability.
-*   **Unbuild**: A powerful and flexible build system for TypeScript libraries, configured for clean builds and declaration generation.
-*   **Vitest**: A fast and modern testing framework with built-in coverage reporting.
-*   **Ultracite & Biome**: Integrated for lightning-fast formatting and linting, ensuring consistent code quality and adherence to best practices.
-*   **Moon**: A high-performance monorepo management tool that orchestrates builds, tests, and other tasks across workspaces.
-*   **Astro + Starlight**: A modern static site generator for creating beautiful, performant, and accessible documentation.
+*   **Seamless Integration**: Works directly with `@orpc/contract` for type-safe API definitions.
+*   **MSW Powered**: Leverages Mock Service Worker for powerful request interception and mocking capabilities.
+*   **Simplified Mocking**: Streamlines the creation of mock handlers for `orpc` procedures.
+*   **Type-Safe Responses**: Ensures mock responses adhere to your defined `orpc` contract types.
+*   **Flexible Response Handling**: Supports dynamic responses and custom `HttpResponse` or `Response` objects.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 *   [Node.js](https://nodejs.org/) (v22 or later recommended)
-*   [pnpm](https://pnpm.io/) (v8 or later recommended)
+*   [pnpm](https://pnpm.io/) (v10 or later recommended)
 
 ### Installation
 
-1.  Clone the repository:
-    ```bash
-    pnpx giget gh:DanSnow/typescript-library-starter
-    cd typescript-library-starter
-    ```
-2.  Install dependencies using pnpm:
-    ```bash
-    pnpm install
-    ```
-
-## 📦 Development
-
-This project uses `moon` to manage tasks across the monorepo.
-
-### Building the Library
-
-To build the core library:
+Install `orpc-msw` and its peer dependencies:
 
 ```bash
-pnpm build # or moon run build
+pnpm add -D orpc-msw @orpc/contract @orpc/openapi-client msw
 ```
 
-This command uses `unbuild` to compile the TypeScript source code into `dist/` directory.
+### Basic Usage
 
-### Running Tests
+Here's a quick example of how to use `orpc-msw` to mock an `orpc` procedure:
 
-To run tests for the library:
+First, define your `orpc` contract:
 
-```bash
-pnpm test # or moon run test
+```typescript
+// contract.ts
+import { os } from "@orpc/server";
+import { z } from "zod";
+
+export const myContract = os.router({
+  greeter: os
+    .route({ method: "GET", path: "/hello" })
+    .input(z.object({ name: z.string() }))
+    .output(z.object({ message: z.string() }))
+    ,
+});
 ```
 
-This command uses `vitest` to execute tests and generate coverage reports.
+Then, create your MSW handlers using `createMSWUtilities`:
 
-### Linting and Formatting
+```typescript
+// msw-handlers.ts
+import { setupWorker } from "msw/browser";
+import { createMSWUtilities } from "orpc-msw";
+import { myContract } from "./contract";
 
-This project uses `Biome` with `Ultracite` rules for code formatting and linting.
+const msw = createMSWUtilities({
+  router: myContract,
+  baseUrl: "http://localhost:3000", // Your API base URL
+});
 
-To check for linting issues and format the code:
+export const handlers = [
+  msw.greeter.hello.handler(({ input }) => ({
+    message: `Hello, ${input.name}! This is a mock response.`,
+  })),
+];
 
-```bash
-pnpm biome check --write --unsafe
+// In your setup file (e.g., src/mocks/browser.ts for browser environments)
+export const worker = setupWorker(...handlers);
 ```
 
-### Documentation
+Start the worker in your application:
 
-The documentation site is built with Astro and Starlight.
+```typescript
+// main.ts or test-setup.ts
+import { worker } from "./msw-handlers";
 
-1.  To start the local development server for the documentation:
-    ```bash
-    cd docs
-    pnpm dev
-    ```
-    The documentation will be available at `http://localhost:4321`.
-
-2.  Documentation files are located in `docs/src/content/docs/`. You can add new `.md` or `.mdx` files here.
-
-## 📂 Project Structure
-
+if (import.meta.env.DEV) {
+  worker.start();
+}
 ```
-.
-├── docs/                 # Astro + Starlight documentation site
-├── src/                  # Core library source code
-│   ├── __tests__/        # Vitest test files
-│   └── index.ts          # Main entry point for the library
-├── biome.jsonc           # Biome configuration, extending Ultracite rules
-├── build.confg.ts        # Unbuild configuration for library compilation
-├── moon.yml              # Moon monorepo task runner configuration
-├── package.json          # Root package.json with project metadata and scripts
-├── pnpm-lock.yaml        # pnpm lockfile
-├── pnpm-workspace.yaml   # pnpm workspace configuration for monorepo
-├── tsconfig.json         # TypeScript configuration for the root project
-└── vitest.config.ts      # Vitest configuration for testing
-```
+
+## 📚 Documentation
+
+For more detailed information, guides, and API reference, please visit the [documentation website](https://dansnow.github.io/orpc-msw/).
 
 ## 📄 License
 

@@ -2,31 +2,32 @@
 
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
+import starlightTypeDoc, { typeDocSidebarGroup } from "starlight-typedoc";
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     starlight({
-      title: "My Docs",
+      plugins: [
+        starlightTypeDoc({
+          entryPoints: ["../src/index.ts"],
+          tsconfig: "../tsconfig.json",
+        }),
+      ],
+      title: "orpc-msw",
       social: [
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/withastro/starlight",
+          href: "https://github.com/DanSnow/orpc-msw",
         },
       ],
       sidebar: [
         {
           label: "Guides",
-          items: [
-            // Each item here is one entry in the navigation menu.
-            { label: "Example Guide", slug: "guides/example" },
-          ],
+          autogenerate: { directory: "guides" },
         },
-        {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
-        },
+        typeDocSidebarGroup,
       ],
     }),
   ],
