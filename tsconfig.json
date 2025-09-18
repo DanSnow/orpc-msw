@@ -4,5 +4,6 @@
     "module": "preserve",
     "moduleResolution": "bundler"
   },
-  "include": ["src/**/*", "tsdown.config.ts", "vitest.config.ts"]
+  "include": ["**/*"],
+  "exclude": ["docs/**/*"]
 }
