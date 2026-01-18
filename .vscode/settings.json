@@ -1,7 +1,8 @@
 {
+  "biome.enabled": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]": {
-    "editor.defaultFormatter": "biomejs.biome"
+  "[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
@@ -11,10 +12,6 @@
   "editor.formatOnPaste": true,
   "emmet.showExpandedAbbreviation": "never",
   "editor.codeActionsOnSave": {
-    "source.fixAll.biome": "always",
-    "source.organizeImports.biome": "explicit"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "source.fixAll.oxc": "always"
   }
 }

@@ -32,7 +32,7 @@ const router = os.router({
       .input(
         z.object({
           query: z.string(),
-        })
+        }),
       )
       .output(z.string())
       .handler(({ input }) => input.query),
@@ -44,7 +44,7 @@ const router = os.router({
       .input(
         z.object({
           data: z.string(),
-        })
+        }),
       )
       .output(z.string())
       .handler(({ input }) => input.data),
@@ -57,7 +57,7 @@ const router = os.router({
         z.object({
           id: z.string(),
           data: z.string(),
-        })
+        }),
       )
       .output(z.string())
       .handler(({ input }) => `Updated ${input.id} with ${input.data}`),
@@ -69,7 +69,7 @@ const router = os.router({
       .input(
         z.object({
           id: z.string(),
-        })
+        }),
       )
       .output(z.string())
       .handler(({ input }) => `Deleted ${input.id}`),
@@ -85,7 +85,7 @@ const client: RouterClient<typeof router> = createORPCClient(
       // this is necessary to allow msw to mock it
       return fetch(request, init);
     },
-  })
+  }),
 );
 
 const msw = createMSWUtilities({ router, baseUrl });
@@ -101,7 +101,7 @@ describe("createMSWUtilities", () => {
       server.use(
         msw.greet.handler(() => {
           return "mocked greet";
-        })
+        }),
       );
 
       const data = await client.greet();
@@ -112,7 +112,7 @@ describe("createMSWUtilities", () => {
       server.use(
         msw.user.get.handler(({ input }) => {
           return { id: input, name: `Mocked User ${input}` };
-        })
+        }),
       );
 
       const userId = "123";
@@ -131,7 +131,7 @@ describe("createMSWUtilities", () => {
       server.use(
         msw.greet.handler(() => {
           return Promise.resolve("async mocked greet");
-        })
+        }),
       );
 
       const data = await client.greet();

@@ -16,8 +16,25 @@ tasks:
       - src/**/*
       - vitest.config.ts
   lint:
-    command: biome
+    command: oxlint
     args:
-      - check
       - --fix
     toolchain: node
+  format-oxfmt:
+    command: oxfmt
+    args:
+      - --write
+      - --ignore-path=.gitignore
+      - .
+    toolchain: node
+  format-prettier:
+    command: prettier
+    args:
+      - --write
+      - --no-error-on-unmatched-pattern
+      - "'**/*.{md,mdx,astro,yaml,yml}'"
+    toolchain: node
+  format:
+    deps:
+      - format-oxfmt
+      - format-prettier

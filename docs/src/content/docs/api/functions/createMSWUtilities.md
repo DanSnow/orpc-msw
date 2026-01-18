@@ -15,7 +15,7 @@ The main function to create MSW handlers from your `@orpc/contract` router.
 
 ### T
 
-`T` *extends* `AnyContractRouter`
+`T` _extends_ `AnyContractRouter`
 
 The oRPC contract router type.
 

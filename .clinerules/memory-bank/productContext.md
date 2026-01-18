@@ -6,10 +6,10 @@
 
 ## Problems it solves
 
-*   **Lack of Type Safety in Mocks**: Ensures that mock responses adhere to the `@orpc/contract` definitions, preventing common errors due to type mismatches.
-*   **Complex Mock Setup**: Simplifies the creation of MSW handlers for `orpc` procedures, reducing boilerplate code.
-*   **Inconsistent Testing Environments**: Provides a consistent way to mock API interactions across different testing environments (unit, integration, end-to-end).
-*   **Focus on OpenAPI `orpc`**: Specifically targets OpenAPI-based `orpc` contracts, which have a defined HTTP method and path, making them suitable for MSW interception.
+- **Lack of Type Safety in Mocks**: Ensures that mock responses adhere to the `@orpc/contract` definitions, preventing common errors due to type mismatches.
+- **Complex Mock Setup**: Simplifies the creation of MSW handlers for `orpc` procedures, reducing boilerplate code.
+- **Inconsistent Testing Environments**: Provides a consistent way to mock API interactions across different testing environments (unit, integration, end-to-end).
+- **Focus on OpenAPI `orpc`**: Specifically targets OpenAPI-based `orpc` contracts, which have a defined HTTP method and path, making them suitable for MSW interception.
 
 ## How it should work
 
@@ -17,7 +17,7 @@ The library should expose a `createMSWUtilities` function that takes an `orpc` r
 
 ## User experience goals
 
-*   **Developer-Friendly**: Easy to integrate and use with existing `@orpc/contract` and MSW setups.
-*   **Intuitive API**: The API should feel natural and mirror the structure of the `orpc` contract.
-*   **Reliable Testing**: Enable developers to write robust and reliable tests for their `orpc` API integrations.
-*   **Clear Documentation**: Comprehensive documentation that guides users from installation to advanced usage.
+- **Developer-Friendly**: Easy to integrate and use with existing `@orpc/contract` and MSW setups.
+- **Intuitive API**: The API should feel natural and mirror the structure of the `orpc` contract.
+- **Reliable Testing**: Enable developers to write robust and reliable tests for their `orpc` API integrations.
+- **Clear Documentation**: Comprehensive documentation that guides users from installation to advanced usage.

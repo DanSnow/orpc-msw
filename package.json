@@ -2,30 +2,33 @@
   "name": "orpc-msw",
   "version": "0.0.1",
   "description": "",
-  "types": "./dist/index-Cfjfpa_P.d.ts",
-  "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json"
-  },
-  "type": "module",
-  "scripts": {
-    "build": "moon run build --",
-    "lint": "biome check --fix",
-    "test": "moon run test --",
-    "typecheck": "tsc --noEmit",
-    "prepare": "test -z \"$MOON_VERSION\" && moon run --no-actions build || true"
-  },
-  "files": [
-    "dist/**/*"
-  ],
   "keywords": [],
   "author": {
     "name": "DanSnow",
     "url": "https://github.com/DanSnow"
   },
-  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
+  "files": [
+    "dist/**/*"
+  ],
+  "type": "module",
+  "types": "./dist/index-Cfjfpa_P.d.ts",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "moon run build --",
+    "lint": "moon run lint --",
+    "format": "moon run format --",
+    "test": "moon run test --",
+    "typecheck": "tsc --noEmit",
+    "prepare": "test -z \"$MOON_VERSION\" && moon run --no-actions build || true"
+  },
+  "dependencies": {
+    "destr": "^2.0.5",
+    "ufo": "^1.6.3"
+  },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
     "@moonrepo/cli": "^1.41.7",
     "@orpc/client": "^1.8.9",
     "@orpc/contract": "^1.8.9",
@@ -34,9 +37,12 @@
     "@orpc/server": "^1.8.9",
     "@tsconfig/node22": "^22.0.5",
     "msw": "^2.11.2",
+    "oxfmt": "^0.24.0",
+    "oxlint": "^1.0.0",
+    "prettier": "^3.5.0",
+    "prettier-plugin-astro": "^0.14.0",
     "tsdown": "^0.19.0",
     "typescript": "^5.9.3",
-    "ultracite": "5.3.8",
     "vite": "^7.3.1",
     "vitest": "^4.0.17",
     "zod": "^4.3.5"
@@ -46,8 +52,5 @@
     "@orpc/openapi-client": "^1.8.7",
     "msw": "^2.11.1"
   },
-  "dependencies": {
-    "destr": "^2.0.5",
-    "ufo": "^1.6.3"
-  }
+  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48"
 }

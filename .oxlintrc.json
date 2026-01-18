@@ -1,0 +1,7 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import", "unicorn", "oxc", "jsdoc", "promise", "node"],
+  "rules": {
+    "no-barrel-file": "off"
+  }
+}

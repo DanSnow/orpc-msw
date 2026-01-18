@@ -4,18 +4,18 @@ A utility library for simplifying the mocking of [`@orpc/contract`](https://orpc
 
 ## ✨ Features
 
-*   **Seamless Integration**: Works directly with `@orpc/contract` for type-safe API definitions.
-*   **MSW Powered**: Leverages Mock Service Worker for powerful request interception and mocking capabilities.
-*   **Simplified Mocking**: Streamlines the creation of mock handlers for `orpc` procedures.
-*   **Type-Safe Responses**: Ensures mock responses adhere to your defined `orpc` contract types.
-*   **Flexible Response Handling**: Supports dynamic responses and custom `HttpResponse` or `Response` objects.
+- **Seamless Integration**: Works directly with `@orpc/contract` for type-safe API definitions.
+- **MSW Powered**: Leverages Mock Service Worker for powerful request interception and mocking capabilities.
+- **Simplified Mocking**: Streamlines the creation of mock handlers for `orpc` procedures.
+- **Type-Safe Responses**: Ensures mock responses adhere to your defined `orpc` contract types.
+- **Flexible Response Handling**: Supports dynamic responses and custom `HttpResponse` or `Response` objects.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-*   [Node.js](https://nodejs.org/) (v22 or later recommended)
-*   [pnpm](https://pnpm.io/) (v10 or later recommended)
+- [Node.js](https://nodejs.org/) (v22 or later recommended)
+- [pnpm](https://pnpm.io/) (v10 or later recommended)
 
 ### Installation
 
@@ -40,7 +40,7 @@ export const myContract = os.router({
   greeter: os
     .route({ method: "GET", path: "/hello" })
     .input(z.object({ name: z.string() }))
-    .output(z.object({ message: z.string() }))
+    .output(z.object({ message: z.string() })),
 });
 ```
 

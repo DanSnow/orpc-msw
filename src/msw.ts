@@ -44,7 +44,7 @@ interface MSWProcedureInput<TInput> {
 type MSWMockInput<TInput, TOutput> =
   | TOutput
   | ((
-      args: MSWProcedureInput<TInput>
+      args: MSWProcedureInput<TInput>,
     ) =>
       | TOutput
       | Response
@@ -72,11 +72,12 @@ interface MSWProcedure<TInput, TOutput> {
  * @template T The oRPC contract router type.
  */
 // biome-ignore lint/suspicious/noExplicitAny: it need to be any here to accept any input
-type MSWUtilities<T extends AnyContractRouter> = T extends ContractProcedure<infer Input, infer Output, any, any>
-  ? MSWProcedure<InferSchemaInput<Input>, InferSchemaOutput<Output>>
-  : {
-      [K in keyof T]: T[K] extends AnyContractRouter ? MSWUtilities<T[K]> : never;
-    };
+type MSWUtilities<T extends AnyContractRouter> =
+  T extends ContractProcedure<infer Input, infer Output, any, any>
+    ? MSWProcedure<InferSchemaInput<Input>, InferSchemaOutput<Output>>
+    : {
+        [K in keyof T]: T[K] extends AnyContractRouter ? MSWUtilities<T[K]> : never;
+      };
 
 /**
  * The main function to create MSW handlers from your `@orpc/contract` router.
@@ -95,7 +96,7 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
   function createHandler<TInput, TOutput>(
     proc: AnyContractProcedure,
     path: string[],
-    mockResponse: MSWMockInput<TInput, TOutput>
+    mockResponse: MSWMockInput<TInput, TOutput>,
   ): HttpHandler {
     const { route } = proc["~orpc"];
     const routePath = route.path ?? `/${path.join("/")}`;
@@ -114,7 +115,7 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
             request,
             input,
             path,
-          })
+          }),
         );
       } else {
         response = mockResponse;
@@ -147,7 +148,7 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
           }
           return;
         },
-      }
+      },
     ) as MSWUtilities<R>;
   }
 
