@@ -27,6 +27,8 @@ interface MSWProcedureInput<TInput> {
   input: TInput;
   /** An array of strings representing the path to the current procedure within the contract router. */
   path: string[];
+  /** The extracted path parameters from the URL (e.g., `{ id: "123" }` for `/users/:id`). */
+  params: Record<string, string | readonly string[] | undefined>;
 }
 
 /**
@@ -100,8 +102,9 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
   ): HttpHandler {
     const { route } = proc["~orpc"];
     const routePath = route.path ?? `/${path.join("/")}`;
+    const mswPath = convertOrpcPathToMsw(routePath);
     const httpHandler = getMSWMethods(route.method);
-    return httpHandler(joinURL(baseUrl, routePath), async ({ request }) => {
+    return httpHandler(joinURL(baseUrl, mswPath), async ({ request, params }) => {
       const input =
         route.method === "GET"
           ? (serializer.deserialize(new URL(request.url).searchParams) as TInput)
@@ -115,6 +118,7 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
             request,
             input,
             path,
+            params,
           }),
         );
       } else {
@@ -175,4 +179,19 @@ function getMSWMethods(method?: HTTPMethod) {
   return method != null ? (mswMethods[method] ?? http.post) : http.post;
 }
 
-export { createMSWUtilities };
+/**
+ * Normalizes oRPC path parameter syntax for MSW compatibility.
+ * oRPC uses curly brace syntax (`{param}`) while MSW uses colon syntax (`:param`).
+ * oRPC also supports catch-all parameters with `{+param}` which converts to `:param*`.
+ * @param path The oRPC-style path with curly brace parameters
+ * @returns The normalized path compatible with MSW
+ */
+function convertOrpcPathToMsw(path: string): string {
+  return path
+    // Convert catch-all parameters: {+param} -> :param*
+    .replace(/\{\+([a-zA-Z_][a-zA-Z0-9_]*)\}/g, ":$1*")
+    // Convert named parameters: {param} -> :param
+    .replace(/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/g, ":$1");
+}
+
+export { createMSWUtilities, convertOrpcPathToMsw };

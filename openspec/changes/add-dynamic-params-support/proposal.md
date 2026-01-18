@@ -2,29 +2,29 @@
 
 ## Summary
 
-Add support for converting oRPC dynamic path parameters (`:param` syntax) to MSW path parameters (`{param}` syntax) when generating MSW handlers.
+Add support for dynamic path parameters in oRPC routes when generating MSW handlers, including exposing path parameter values to mock handler callbacks.
 
 ## Problem Statement
 
-oRPC uses Express-style path parameters with colon notation (e.g., `/users/:id`), while MSW uses curly brace notation (e.g., `/users/{id}`). Currently, `orpc-msw` passes the oRPC path directly to MSW without conversion, which means dynamic path parameters are not properly matched by MSW handlers.
+oRPC uses curly brace syntax for path parameters (e.g., `/users/{id}`), while MSW uses colon syntax (e.g., `/users/:id`). This mismatch requires conversion when creating MSW handlers from oRPC routes. Additionally, oRPC supports catch-all parameters with `{+param}` syntax for matching slashes. Path parameter values need to be exposed to mock handler callbacks so developers can use them in dynamic responses.
 
 For example, an oRPC route defined as:
 ```typescript
-os.route({ path: "/users/:id", method: "GET" })
+os.route({ path: "/users/{id}", method: "GET" })
 ```
 
-Should generate an MSW handler that matches `/users/{id}`, but currently it would try to match the literal path `/users/:id`.
+Should generate an MSW handler that matches `/users/:id` and provides the extracted `id` parameter value to the handler callback.
 
 ## Proposed Solution
 
-Implement a path conversion function that transforms oRPC path parameter syntax to MSW syntax before passing the path to MSW's `http.*` methods.
+Implement a path normalization function that converts oRPC path parameter syntax to MSW-compatible syntax and ensure path parameters are properly exposed to mock handlers via the `params` object.
 
-### Conversion Rules
+### Normalization Rules
 
 | oRPC Syntax | MSW Syntax | Description |
 |-------------|------------|-------------|
-| `:param` | `{param}` | Named parameter |
-| `:param?` | `{param}` | Optional parameter (MSW handles optionality differently) |
+| `{param}` | `:param` | Named parameter (conversion required) |
+| `{+param}` | `:param*` | Catch-all parameter (matches slashes) |
 
 ### Implementation Location
 
@@ -33,12 +33,12 @@ The conversion should happen in the `createHandler` function in [msw.ts](../../s
 ## Scope
 
 ### In Scope
-- Convert `:param` syntax to `{param}` syntax in route paths
+- Convert oRPC `{param}` syntax to MSW `:param` syntax in route paths
+- Convert oRPC `{+param}` catch-all syntax to MSW wildcard syntax
 - Expose path parameters to the mock handler callback via `MSWProcedureInput`
-- Handle edge cases (multiple params, params at different positions, optional params)
+- Handle edge cases (multiple params, params at different positions)
 
 ### Out of Scope
-- Wildcard routes (e.g., `*` or `**`)
 - Regex-based route matching
 - Query parameter handling (already works via existing serializer)
 
@@ -53,7 +53,7 @@ The conversion should happen in the `createHandler` function in [msw.ts](../../s
 | Risk | Mitigation |
 |------|------------|
 | Regex edge cases in param names | Use well-tested regex pattern; add comprehensive tests |
-| Optional param behavior differs between oRPC and MSW | Document the behavior difference; MSW treats all params as required in path matching |
+| Catch-all `{+param}` behavior may differ between oRPC and MSW | Document the behavior; ensure MSW wildcard syntax matches oRPC semantics |
 
 ## Related
 

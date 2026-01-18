@@ -2,40 +2,39 @@
 
 ## Implementation Tasks
 
-### 1. Add path conversion utility function
-- [ ] Create `convertOrpcPathToMsw(path: string): string` function in `msw.ts`
-- [ ] Convert `:paramName` to `{paramName}` using regex
-- [ ] Handle optional params (`:paramName?` -> `{paramName}`)
-- [ ] Preserve non-param path segments unchanged
+### 1. Add path normalization utility function
+- [x] Create `convertOrpcPathToMsw(path: string): string` function in `msw.ts`
+- [x] Convert oRPC curly brace syntax `{param}` to MSW colon syntax `:param`
+- [x] Convert catch-all syntax `{+param}` to MSW wildcard syntax `:param*`
 
-**Validation**: Unit tests for conversion function with various path patterns
+**Validation**: Unit tests for normalization function with various path patterns
 
-### 2. Integrate conversion in handler creation
-- [ ] Call `convertOrpcPathToMsw()` on `routePath` before passing to MSW handler
-- [ ] Location: `createHandler` function around line 104
+### 2. Integrate normalization in handler creation
+- [x] Call `convertOrpcPathToMsw()` on `routePath` before passing to MSW handler
+- [x] Location: `createHandler` function around line 104
 
 **Validation**: Existing tests continue to pass (no regression)
 
 ### 3. Expose path params in MSWProcedureInput
-- [ ] Extract path parameters from MSW request info
-- [ ] Add `params: Record<string, string>` to `MSWProcedureInput` interface
-- [ ] Pass params to mock handler callback
+- [x] Extract path parameters from MSW request info
+- [x] Add `params: Record<string, string | readonly string[] | undefined>` to `MSWProcedureInput` interface
+- [x] Pass params to mock handler callback
 
 **Validation**: New tests verify params are accessible in handler
 
 ### 4. Add comprehensive tests
-- [ ] Test single param: `/users/:id` -> matches `/users/123`
-- [ ] Test multiple params: `/users/:userId/posts/:postId`
-- [ ] Test param at start: `/:resource/list`
-- [ ] Test optional param handling: `/users/:id?`
-- [ ] Test mixed static and dynamic segments: `/api/v1/users/:id/profile`
-- [ ] Test param value extraction in mock handler
+- [x] Test single param: `/users/{id}` -> `/users/:id` -> matches `/users/123`
+- [x] Test multiple params: `/users/{userId}/posts/{postId}` -> `/users/:userId/posts/:postId`
+- [x] Test param at start: `/{resource}/list` -> `/:resource/list`
+- [x] Test catch-all param: `/files/{+path}` -> `/files/:path*`
+- [x] Test mixed static and dynamic segments: `/api/v1/users/{id}/profile`
+- [x] Test param value extraction in mock handler
 
 **Validation**: All new tests pass
 
 ### 5. Update documentation
-- [ ] Add JSDoc comments to new function and interface changes
-- [ ] Update type definitions for `MSWProcedureInput`
+- [x] Add JSDoc comments to new function and interface changes
+- [x] Update type definitions for `MSWProcedureInput`
 
 **Validation**: Types compile without errors
 
