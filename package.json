@@ -2,11 +2,9 @@
   "name": "orpc-msw",
   "version": "0.0.1",
   "description": "",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index-Cfjfpa_P.d.ts",
   "exports": {
-    ".": "./dist/index.js",
+    ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
   "type": "module",
@@ -25,23 +23,23 @@
     "name": "DanSnow",
     "url": "https://github.com/DanSnow"
   },
-  "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef",
+  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@moonrepo/cli": "^1.40.3",
+    "@moonrepo/cli": "^1.41.7",
     "@orpc/client": "^1.8.9",
     "@orpc/contract": "^1.8.9",
     "@orpc/openapi": "^1.8.9",
     "@orpc/openapi-client": "^1.8.9",
     "@orpc/server": "^1.8.9",
-    "@tsconfig/node22": "^22.0.2",
+    "@tsconfig/node22": "^22.0.5",
     "msw": "^2.11.2",
-    "tsdown": "^0.15.2",
-    "typescript": "^5.9.2",
+    "tsdown": "^0.19.0",
+    "typescript": "^5.9.3",
     "ultracite": "5.3.8",
-    "vite": "^7.1.6",
-    "vitest": "^3.2.4",
-    "zod": "^4.1.9"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.17",
+    "zod": "^4.3.5"
   },
   "peerDependencies": {
     "@orpc/contract": "^1.8.7",
@@ -50,6 +48,6 @@
   },
   "dependencies": {
     "destr": "^2.0.5",
-    "ufo": "^1.6.1"
+    "ufo": "^1.6.3"
   }
 }
