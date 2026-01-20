@@ -38,6 +38,23 @@
 
 **Validation**: Types compile without errors
 
+### 6. Implement params merging based on inputStructure
+- [x] Read `inputStructure` from route config (default: 'compact')
+- [x] Add `normalizeParams()` function to convert MSW array params to joined strings
+- [x] In compact mode: merge path params into input object alongside query/body data
+- [x] In detailed mode: structure input as `{ params, query, body }`
+- [x] Handle case where queryOrBody is primitive (no path params case)
+
+**Validation**: Tests verify params are correctly merged into input
+
+### 7. Add tests for params merging behavior
+- [x] Test PUT request with path params merged into body
+- [x] Test GET request with path params merged into query
+- [x] Test that both `input` (merged) and `params` (raw) are available
+- [x] Test catch-all params are joined as string in input
+
+**Validation**: All new tests pass (42 total tests passing)
+
 ## Dependencies
 
 - Task 1 must complete before Task 2

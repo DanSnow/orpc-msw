@@ -104,11 +104,35 @@ function createMSWUtilities<T extends AnyContractRouter>(options: { router: T; b
     const routePath = route.path ?? `/${path.join("/")}`;
     const mswPath = convertOrpcPathToMsw(routePath);
     const httpHandler = getMSWMethods(route.method);
+    const inputStructure = route.inputStructure ?? "compact";
+
     return httpHandler(joinURL(baseUrl, mswPath), async ({ request, params }) => {
-      const input =
+      const queryOrBody =
         route.method === "GET"
-          ? (serializer.deserialize(new URL(request.url).searchParams) as TInput)
-          : (destr(await request.text()) as TInput);
+          ? serializer.deserialize(new URL(request.url).searchParams)
+          : destr(await request.text());
+
+      // Normalize params: MSW returns catch-all params as string[], but oRPC expects them as joined strings
+      const normalizedParams = normalizeParams(params);
+      const hasPathParams = Object.keys(normalizedParams).length > 0;
+
+      // Merge params into input based on inputStructure setting
+      // In compact mode (default): params are merged with query/body into a single object
+      // In detailed mode: input is structured as { params, query, body, headers }
+      let input: TInput;
+      if (inputStructure === "detailed") {
+        input = {
+          params: normalizedParams,
+          query: route.method === "GET" ? queryOrBody : undefined,
+          body: route.method !== "GET" ? queryOrBody : undefined,
+        } as TInput;
+      } else if (hasPathParams) {
+        // Compact mode with path params: merge params into input
+        input = { ...normalizedParams, ...(queryOrBody as object) } as TInput;
+      } else {
+        // No path params: use query/body as-is (may be primitive or object)
+        input = queryOrBody as TInput;
+      }
 
       let response: TOutput | HttpResponse<DefaultBodyType> | Response;
 
@@ -192,6 +216,27 @@ function convertOrpcPathToMsw(path: string): string {
     .replace(/\{\+([a-zA-Z_][a-zA-Z0-9_]*)\}/g, ":$1*")
     // Convert named parameters: {param} -> :param
     .replace(/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/g, ":$1");
+}
+
+/**
+ * Normalizes MSW params to match oRPC's expected format.
+ * MSW returns catch-all params as `string[]`, but oRPC expects them as joined strings with '/'.
+ * @param params The MSW params object
+ * @returns Normalized params with arrays joined by '/'
+ */
+function normalizeParams(
+  params: Record<string, string | readonly string[] | undefined>,
+): Record<string, string | undefined> {
+  const result: Record<string, string | undefined> = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (Array.isArray(value)) {
+      result[key] = value.join("/");
+    } else {
+      // value is string | undefined after array check
+      result[key] = value as string | undefined;
+    }
+  }
+  return result;
 }
 
 export { createMSWUtilities, convertOrpcPathToMsw };

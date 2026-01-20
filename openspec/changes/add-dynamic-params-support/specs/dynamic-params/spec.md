@@ -63,3 +63,37 @@ Given an oRPC route with path `/api/v1/users/{id}/profile`
 When an MSW handler is created for this route
 Then the handler MUST convert to `/api/v1/users/:id/profile` pattern for MSW
 And static segments `/api/v1/users/` and `/profile` MUST remain unchanged
+
+### Requirement: Path parameter merging based on inputStructure
+
+The library MUST merge path parameters into the input object based on the route's `inputStructure` setting, matching oRPC's behavior.
+
+#### Scenario: Compact mode merges params into input (default)
+
+Given an oRPC route with path `/users/{id}` and default inputStructure (compact)
+And a mock handler function is provided
+When a request to `/users/456` is intercepted with body `{ "name": "John" }`
+Then the handler callback MUST receive `input` containing `{ id: "456", name: "John" }`
+Note: Path params are merged with body/query data in compact mode
+
+#### Scenario: Compact mode with GET request
+
+Given an oRPC route with path `/users/{id}` method GET and default inputStructure (compact)
+And a mock handler function is provided
+When a request to `/users/456?search=test` is intercepted
+Then the handler callback MUST receive `input` containing `{ id: "456", search: "test" }`
+
+#### Scenario: Detailed mode keeps params separate
+
+Given an oRPC route with path `/users/{id}` and `inputStructure: 'detailed'`
+And a mock handler function is provided
+When a request to `/users/456` is intercepted with body `{ "name": "John" }`
+Then the handler callback MUST receive `input` containing `{ params: { id: "456" }, body: { name: "John" } }`
+Note: In detailed mode, params are NOT merged into the top-level input
+
+#### Scenario: Params always available separately
+
+Given any oRPC route with path parameters
+When a request is intercepted
+Then the handler callback MUST always receive `params` as a separate field in MSWProcedureInput
+Note: The `params` field is always available regardless of inputStructure for cases where handlers need direct access

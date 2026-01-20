@@ -16,3 +16,14 @@ Use `@/openspec/AGENTS.md` to learn:
 Keep this managed block so 'openspec update' can refresh the instructions.
 
 <!-- OPENSPEC:END -->
+
+## Version Control
+
+This project uses **jj (Jujutsu)** instead of git for version control.
+
+Common commands:
+- `jj status` - Show working copy changes
+- `jj log` - Show commit history
+- `jj commit -m "message"` - Commit working copy with message and start new change
+- `jj new` - Create a new change on top of the current one
+- `jj squash` - Squash changes into parent commit
