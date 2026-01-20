@@ -1,7 +1,25 @@
 {
   "biome.enabled": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css]": {
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[css]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[astro]": {

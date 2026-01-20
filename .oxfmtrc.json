@@ -1,4 +1,7 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "printWidth": 120
+  "printWidth": 120,
+  "ignorePatterns": [
+    "!**/*.{js,ts,jsx,tsx,json,jsonc}"
+  ]
 }
