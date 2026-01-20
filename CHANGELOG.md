@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/DanSnow/orpc-msw/compare/orpc-msw-v0.0.1...orpc-msw-v0.1.0) (2026-01-20)
+
+
+### Features
+
+* add dynamic path params support ([#4](https://github.com/DanSnow/orpc-msw/issues/4)) ([4681943](https://github.com/DanSnow/orpc-msw/commit/4681943f510c684336cad0c3e83560196329bbce))
+
 ## 0.0.1 (2025-09-18)
 
 ### Features
