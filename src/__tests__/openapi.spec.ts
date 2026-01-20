@@ -445,7 +445,7 @@ describe("createMSWUtilities", () => {
         for (const id of ids) {
           const response = await fetch(`${baseUrl}/users/${id}`, { method: "GET" });
           expect(response.ok).toBe(true);
-          const data = await response.json();
+          const data = (await response.json()) as { id: string; name: string };
           expect(data.id).toBe(id);
           expect(data.name).toBe(`User ${id}`);
         }
@@ -462,7 +462,7 @@ describe("createMSWUtilities", () => {
         // MSW decodes URL-encoded parameters, so %40 becomes @
         const response = await fetch(`${baseUrl}/users/user%40example`, { method: "GET" });
         expect(response.ok).toBe(true);
-        const data = await response.json();
+        const data = (await response.json()) as { id: string; name: string };
         expect(data.id).toBe("user@example");
       });
 
@@ -484,7 +484,7 @@ describe("createMSWUtilities", () => {
         for (const { userId, postId } of testCases) {
           const response = await fetch(`${baseUrl}/users/${userId}/posts/${postId}`, { method: "GET" });
           expect(response.ok).toBe(true);
-          const data = await response.json();
+          const data = (await response.json()) as { userId: string; postId: string; title: string };
           expect(data.userId).toBe(userId);
           expect(data.postId).toBe(postId);
           expect(data.title).toBe(`Post ${postId} by ${userId}`);
@@ -509,7 +509,7 @@ describe("createMSWUtilities", () => {
         for (const filePath of testPaths) {
           const response = await fetch(`${baseUrl}/files/${filePath}`, { method: "GET" });
           expect(response.ok).toBe(true);
-          const data = await response.json();
+          const data = (await response.json()) as { path: string };
           expect(data.path).toBe(filePath);
         }
       });
@@ -530,13 +530,13 @@ describe("createMSWUtilities", () => {
         );
 
         const response1 = await fetch(`${baseUrl}/users/1`, { method: "GET" });
-        expect((await response1.json()).name).toBe("Alice");
+        expect(((await response1.json()) as { name: string }).name).toBe("Alice");
 
         const response2 = await fetch(`${baseUrl}/users/2`, { method: "GET" });
-        expect((await response2.json()).name).toBe("Bob");
+        expect(((await response2.json()) as { name: string }).name).toBe("Bob");
 
         const response3 = await fetch(`${baseUrl}/users/999`, { method: "GET" });
-        expect((await response3.json()).name).toBe("Unknown User");
+        expect(((await response3.json()) as { name: string }).name).toBe("Unknown User");
       });
     });
   });
