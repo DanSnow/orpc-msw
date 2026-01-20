@@ -2,7 +2,11 @@
   "name": "orpc-msw",
   "version": "0.1.0",
   "description": "",
-  "keywords": [],
+  "keywords": [
+    "mocking",
+    "msw",
+    "orpc"
+  ],
   "author": {
     "name": "DanSnow",
     "url": "https://github.com/DanSnow"
